@@ -12,21 +12,26 @@ const condicionDeJuego = document.querySelector('.game-notification'),
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6]
-  ],
+  ];
 
-  ganador = () => `El jugador ${jugador} ha ganado!`,
-  empate = () => `El juego ha terminado en empate!`,
-  alerta = () => ``
-
-
+ganador = () => `El jugador ${jugador === "O" ? player1 : player2} ha ganado!`;
+empate = () => `El juego ha terminado en empate!`;
+function alerta() {return `turno de  ${jugador === "O" ? player1 : player2}`}
+  //alerta = () =>jugador === "O" ? `turno de  ${player1}`: `turno de  ${player2}`
+/*  alerta = () =>{if(jugador === "O"){
+    return `turno de ${player1}`;*/
 
 // ==================== VARIABLES ==================== //
-let partida = true,
-  jugador = "O"
-let X = 0;
-let O = 0;
-let player1 = prompt('nombre del jugador 1')
-let player2 = prompt('nombre del jugador 2')
+partida = true;
+jugador = "O";
+
+let  O = localStorage.getItem('jugador2') ?? 0;
+let  X = localStorage.getItem('jugador1') ?? 0;
+
+//let  O = localStorage.getItem('jugador2') === null ? 0:localStorage.getItem('jugador2');
+//let  X = localStorage.getItem('jugador1') === null ? 0:localStorage.getItem('jugador1');
+let player1 = prompt('nombre del jugador O')
+let player2 = prompt('nombre del jugador X')
 
 // ==================== FUNCTIONS ==================== //
 
@@ -41,7 +46,7 @@ function base() {
 function llamado() {
   document.querySelector('.game-container').addEventListener('click', pulsacion)
   document.querySelector('.game-restart').addEventListener('click', resetear)
- 
+  document.querySelector('#pentakill').addEventListener('click', borrar)
 }
 
 function mensajeeee(message) {
@@ -51,7 +56,7 @@ function mensajeeee(message) {
 
 function resetear() {
   partida = true
-  jugador = "X"
+  jugador = "O"
   reintentar()
   mensajeeee(alerta())
   document.querySelectorAll('.game-cell').forEach(cell => cell.innerHTML = "")
@@ -149,8 +154,15 @@ function guardado_2(){
   document.querySelector('#circulo').textContent = juga_2
 }
 
-O = localStorage.getItem('jugador2');
-X = localStorage.getItem('jugador1');
+function borrar() {
+  X=0;
+  O=0;
+  localStorage.removeItem('jugador1'); 
+  localStorage.removeItem('jugador2');
+  document.querySelector('#equis').textContent = X;
+  document.querySelector('#circulo').textContent = O;
+};
+
 base()
 guardado_1()
 guardado_2()
